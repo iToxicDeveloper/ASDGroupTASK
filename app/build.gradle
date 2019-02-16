@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.tamimattafi.asdgroup"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    //Constraint Layout
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    //Card View
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    //Design Library
+    implementation 'com.android.support:design:27.1.1'
+    //Lottie Animation
+    implementation 'com.airbnb.android:lottie:1.0.0'
+    //Picasso and Okhttp
+    implementation('com.squareup.picasso:picasso:2.71828', {
+        exclude group: 'com.android.support'
+    })
+    implementation('com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0', {
+        exclude group: 'com.android.support'
+    })
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+
+    //RSS Parser
+    implementation 'com.prof.rssparser:rssparser:2.0.3'
+    //Gson Json
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:multidex:1.0.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
