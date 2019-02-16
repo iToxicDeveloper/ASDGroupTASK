@@ -32,19 +32,11 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     //Lottie Animation
     implementation 'com.airbnb.android:lottie:1.0.0'
-    //Picasso and Okhttp
+    //Picasso
     implementation('com.squareup.picasso:picasso:2.71828', {
         exclude group: 'com.android.support'
     })
-    implementation('com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0', {
-        exclude group: 'com.android.support'
-    })
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
 
-    //RSS Parser
-    implementation 'com.prof.rssparser:rssparser:2.0.3'
-    //Gson Json
-    implementation 'com.google.code.gson:gson:2.8.5'
 
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')

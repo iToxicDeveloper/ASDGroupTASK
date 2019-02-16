@@ -39,7 +39,28 @@
                 android:scrollbars="vertical"
                 android:id="@+id/news_recycler"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <LinearLayout
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/news_error"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view">
+        <ImageView
+                android:src="@drawable/ic_error"
+                android:tint="@color/gray_light"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+        <TextView
+                android:text="Ошибка соединения"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
+    </LinearLayout>
     <ProgressBar
             android:id="@+id/news_progressBar"
             android:layout_width="wrap_content"

@@ -29,7 +29,7 @@ import com.tamimattafi.asdgroup.R
 
 class NewsPage : AppCompatActivity() {
 
-    private lateinit var adapter: NewsRecyclerAdapter
+    private  var adapter: NewsRecyclerAdapter? = null
 
     //Pagination size
     private var PAGE_SIZE = 5
@@ -55,15 +55,12 @@ class NewsPage : AppCompatActivity() {
         DownloadXmlTaskForCount().execute(URL)
 
         //Refresh Listener
-        news_refresh.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener{
-            override fun onRefresh() {
-                PAGE_SIZE = 5
-                PREVIOUS_SIZE = 0
-                NEWS_KEY = "${PREVIOUS_SIZE}-${PAGE_SIZE}"
-                DownloadXmlTask().execute(URL)
-            }
-
-        })
+        news_refresh.setOnRefreshListener {
+            PAGE_SIZE = 5
+            PREVIOUS_SIZE = 0
+            NEWS_KEY = "$PREVIOUS_SIZE-$PAGE_SIZE"
+            DownloadXmlTask().execute(URL)
+        }
 
     }
 
@@ -86,7 +83,9 @@ class NewsPage : AppCompatActivity() {
                 updateUi(mNewsArray)
             }
             else {
-                adapter.getFooter()!!.bind()
+                if (PREVIOUS_SIZE != 0) {
+                    adapter!!.getFooter()!!.bind()
+                }
             }
         }
     }
@@ -107,7 +106,11 @@ class NewsPage : AppCompatActivity() {
                 TOTAL_COUNT = mCount
             }
             else {
-                Toast.makeText(this@NewsPage,"Please check your internet connection",Toast.LENGTH_LONG).show()
+                if (adapter == null) {
+                    news_error.visibility = View.VISIBLE
+                    news_progressBar.visibility = View.GONE
+                    Toast.makeText(this@NewsPage,"Please check your internet connection",Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -154,13 +157,14 @@ class NewsPage : AppCompatActivity() {
     fun addMoreItems(){
         PREVIOUS_SIZE = PAGE_SIZE
         PAGE_SIZE  += 5
-        NEWS_KEY = "${PREVIOUS_SIZE}-${PAGE_SIZE}"
+        NEWS_KEY = "$PREVIOUS_SIZE-$PAGE_SIZE"
         DownloadXmlTask().execute(URL)
     }
 
     //Update news recycler
     fun updateUi(mNewsArray:ArrayList<NewsObject>){
         if (PREVIOUS_SIZE == 0) {
+            news_error.visibility = View.GONE
             news_progressBar.visibility = View.GONE
             news_recycler.layoutManager = LinearLayoutManager(this)
             news_recycler.itemAnimator = DefaultItemAnimator()
@@ -174,10 +178,11 @@ class NewsPage : AppCompatActivity() {
                         if (lastVisibleItem >= PAGE_SIZE -1)
                         {
                             if (lastVisibleItem == TOTAL_COUNT-1) {
-                                Toast.makeText(this@NewsPage,"End of page",Toast.LENGTH_LONG).show()
-                                adapter.getFooter()!!.bind()
+                                adapter!!.getFooter()!!.bind()
                             }
-                            addMoreItems()
+                            else {
+                                addMoreItems()
+                            }
                         }
                 }
 
@@ -186,15 +191,17 @@ class NewsPage : AppCompatActivity() {
 
         }
         else {
-            adapter.addNewItems(mNewsArray)
+            adapter!!.addNewItems(mNewsArray)
         }
-        adapter.notifyDataSetChanged()
+        adapter!!.notifyDataSetChanged()
     }
 
     //Save news list to internal storage
     fun cashNews(mNewsList: ArrayList<NewsObject>) {
         try {
-            InternalStorage.writeObject(this@NewsPage, NEWS_KEY, mNewsList )
+            if (!mNewsList.isEmpty()){
+                InternalStorage.writeObject(this@NewsPage, NEWS_KEY, mNewsList )
+            }
         } catch (e: IOException) {
             Log.i("Cashing News: ",e.message)
         } catch (e: ClassNotFoundException) {
