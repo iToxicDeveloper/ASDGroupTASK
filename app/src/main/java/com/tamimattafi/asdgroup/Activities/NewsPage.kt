@@ -3,11 +3,8 @@ package com.tamimattafi.asdgroup.Activities
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.view.MenuItem
 import android.widget.Toast
 import com.tamimattafi.asdgroup.Classes.InternalStorage
 import com.tamimattafi.asdgroup.Classes.NewsFeedParser
@@ -32,15 +29,15 @@ class NewsPage : AppCompatActivity() {
     private  var adapter: NewsRecyclerAdapter? = null
 
     //Pagination size
-    private var PAGE_SIZE = 5
+    private var mPageSize = 5
     //Last page size
-    private var PREVIOUS_SIZE = 0
+    private var mPreviousSize = 0
     //News cashing cashing key
-    private var NEWS_KEY = "${PREVIOUS_SIZE}-${PAGE_SIZE}"
-    private var TOTAL_COUNT : Long = 0
+    private var mNewsKey = "$mPreviousSize-$mPageSize"
+    private var mTotalCount : Long = 0
 
-    //RSS file URL
-    val URL = "https://lenta.ru/rss/news"
+    //RSS file mFeedUrl
+    private val mFeedUrl = "https://lenta.ru/rss/news"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,17 +46,17 @@ class NewsPage : AppCompatActivity() {
         supportActionBar!!.title = ""
 
         //Load news
-        DownloadXmlTask().execute(URL)
+        DownloadXmlTask().execute(mFeedUrl)
 
         //Get news count
-        DownloadXmlTaskForCount().execute(URL)
+        DownloadXmlTaskForCount().execute(mFeedUrl)
 
         //Refresh Listener
         news_refresh.setOnRefreshListener {
-            PAGE_SIZE = 5
-            PREVIOUS_SIZE = 0
-            NEWS_KEY = "$PREVIOUS_SIZE-$PAGE_SIZE"
-            DownloadXmlTask().execute(URL)
+            mPageSize = 5
+            mPreviousSize = 0
+            mNewsKey = "$mPreviousSize-$mPageSize"
+            DownloadXmlTask().execute(mFeedUrl)
         }
 
     }
@@ -83,7 +80,7 @@ class NewsPage : AppCompatActivity() {
                 updateUi(mNewsArray)
             }
             else {
-                if (PREVIOUS_SIZE != 0) {
+                if (mPreviousSize != 0) {
                     adapter!!.getFooter()!!.bind()
                 }
             }
@@ -103,7 +100,7 @@ class NewsPage : AppCompatActivity() {
 
         override fun onPostExecute(mCount: Long) {
             if (mCount > 0) {
-                TOTAL_COUNT = mCount
+                mTotalCount = mCount
             }
             else {
                 if (adapter == null) {
@@ -121,7 +118,7 @@ class NewsPage : AppCompatActivity() {
 
         val mNews = downloadUrl(urlString)?.use { stream ->
             // Instantiate the parser
-            NewsFeedParser(PAGE_SIZE,PREVIOUS_SIZE).parseNewsRSS(stream)
+            NewsFeedParser(mPageSize,mPreviousSize).parseNewsRSS(stream)
         } ?: ArrayList()
         return if (mNews.isEmpty()){
             readNews()
@@ -135,14 +132,14 @@ class NewsPage : AppCompatActivity() {
     private fun getNewsCount(urlString: String): Long {
         return downloadUrl(urlString)?.use { stream ->
             // Instantiate the parser
-            NewsFeedParser(PAGE_SIZE,PREVIOUS_SIZE).getNewsCount(stream)
+            NewsFeedParser(mPageSize,mPreviousSize).getNewsCount(stream)
         } ?: 0
     }
 
     //Download feed file
     @Throws(IOException::class)
     private fun downloadUrl(urlString: String): InputStream? {
-        val mFeedURL : URL = URL(urlString)
+        val mFeedURL = URL(urlString)
         return (mFeedURL.openConnection() as? HttpURLConnection)?.run {
             readTimeout = 10000
             connectTimeout = 15000
@@ -155,15 +152,15 @@ class NewsPage : AppCompatActivity() {
 
     //Adds 5 more items to the page
     fun addMoreItems(){
-        PREVIOUS_SIZE = PAGE_SIZE
-        PAGE_SIZE  += 5
-        NEWS_KEY = "$PREVIOUS_SIZE-$PAGE_SIZE"
-        DownloadXmlTask().execute(URL)
+        mPreviousSize = mPageSize
+        mPageSize  += 5
+        mNewsKey = "$mPreviousSize-$mPageSize"
+        DownloadXmlTask().execute(mFeedUrl)
     }
 
     //Update news recycler
     fun updateUi(mNewsArray:ArrayList<NewsObject>){
-        if (PREVIOUS_SIZE == 0) {
+        if (mPreviousSize == 0) {
             news_error.visibility = View.GONE
             news_progressBar.visibility = View.GONE
             news_recycler.layoutManager = LinearLayoutManager(this)
@@ -175,9 +172,9 @@ class NewsPage : AppCompatActivity() {
                 override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastVisibleItem = (recyclerView!!.layoutManager as LinearLayoutManager).findLastVisibleItemPosition().toLong()
-                        if (lastVisibleItem >= PAGE_SIZE -1)
+                        if (lastVisibleItem >= mPageSize -1)
                         {
-                            if (lastVisibleItem == TOTAL_COUNT-1) {
+                            if (lastVisibleItem == mTotalCount-1) {
                                 adapter!!.getFooter()!!.bind()
                             }
                             else {
@@ -200,7 +197,7 @@ class NewsPage : AppCompatActivity() {
     fun cashNews(mNewsList: ArrayList<NewsObject>) {
         try {
             if (!mNewsList.isEmpty()){
-                InternalStorage.writeObject(this@NewsPage, NEWS_KEY, mNewsList )
+                InternalStorage.writeObject(this@NewsPage, mNewsKey, mNewsList )
             }
         } catch (e: IOException) {
             Log.i("Cashing News: ",e.message)
@@ -212,7 +209,7 @@ class NewsPage : AppCompatActivity() {
     //Read news list from internal storage
     fun readNews() : ArrayList<NewsObject> {
         return try {
-            InternalStorage.readObject(this@NewsPage, NEWS_KEY) as ArrayList<NewsObject>
+            InternalStorage.readObject(this@NewsPage, mNewsKey) as ArrayList<NewsObject>
         } catch (e: IOException) {
             Log.i("Reading News: ",e.message)
             ArrayList()
