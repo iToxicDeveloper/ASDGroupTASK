@@ -14,6 +14,7 @@ import android.webkit.WebViewClient
 
 class WebPage : AppCompatActivity() {
 
+    private var mCurrentUrl = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_page)
@@ -21,11 +22,11 @@ class WebPage : AppCompatActivity() {
         supportActionBar!!.title = ""
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         web_toolbar.navigationIcon = ResourcesCompat.getDrawable(resources,R.drawable.ic_back,null)
-
         //Get news category
         web_category.text = intent.getStringExtra("category")
         //Get news link
-        web_webView.loadUrl(intent.getStringExtra("link"))
+        mCurrentUrl = intent.getStringExtra("link")
+        web_webView.loadUrl(mCurrentUrl)
         //Enable javaScript for webView
         web_webView.settings.javaScriptEnabled = true
         web_webView.webViewClient = object : WebViewClient() {
@@ -33,15 +34,25 @@ class WebPage : AppCompatActivity() {
                 super.onReceivedError(view, request, error)
                 web_error.visibility = View.VISIBLE
                 web_webView.visibility = View.GONE
+                web_refresh.isRefreshing = false
             }
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 web_progressBar.visibility = View.GONE
+                web_refresh.isRefreshing = false
+
             }
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                view.loadUrl(request.url.toString())
+                //On user browsing new pages
+                mCurrentUrl = request.url.toString()
+                view.loadUrl(mCurrentUrl)
                 return false
             }
+        }
+
+        //Refresh web view
+        web_refresh.setOnRefreshListener {
+            web_webView.reload()
         }
     }
 

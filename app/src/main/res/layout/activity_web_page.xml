@@ -26,17 +26,23 @@
             app:layout_constraintStart_toStartOf="@+id/web_toolbar"
             app:layout_constraintTop_toTopOf="@+id/web_toolbar"
             app:layout_constraintBottom_toBottomOf="@+id/web_toolbar"/>
-    <WebView
-            android:nestedScrollingEnabled="true"
-            android:scrollbars="vertical"
-            android:layout_width="0dp"
-             android:layout_height="0dp"
-             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@android:color/transparent"
-             android:id="@+id/web_webView"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintTop_toBottomOf="@+id/view"/>
+    <android.support.v4.widget.SwipeRefreshLayout android:layout_width="0dp"
+                                                  android:layout_height="0dp"
+                                                  android:id="@+id/web_refresh"
+                                                  app:layout_constraintBottom_toBottomOf="parent"
+                                                  app:layout_constraintTop_toBottomOf="@+id/view"
+                                                  app:layout_constraintEnd_toEndOf="parent"
+                                                  app:layout_constraintStart_toStartOf="parent"
+    >
+        <WebView
+                android:nestedScrollingEnabled="true"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:id="@+id/web_webView"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <View style="@style/HorizontalDevider"
           app:layout_constraintTop_toBottomOf="@+id/web_toolbar"
           app:layout_constraintEnd_toEndOf="parent"
@@ -49,26 +55,17 @@
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintBottom_toBottomOf="parent"
                  app:layout_constraintTop_toBottomOf="@+id/view"/>
-    <LinearLayout
-            android:visibility="gone"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:gravity="center"
-                 android:orientation="vertical"
-                 android:id="@+id/web_error"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintBottom_toBottomOf="parent"
-                 app:layout_constraintTop_toBottomOf="@+id/view">
-        <ImageView
-                android:src="@drawable/ic_error"
-                android:tint="@color/gray_light"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-        <TextView
-                android:text="Ошибка соединения"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+    <TextView
+            android:id="@+id/web_error"
+            android:drawableTop="@drawable/ic_error"
+            android:text="@string/connection_error"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
+
 </android.support.constraint.ConstraintLayout>

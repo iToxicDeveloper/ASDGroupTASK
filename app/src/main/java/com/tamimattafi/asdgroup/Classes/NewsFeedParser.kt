@@ -1,13 +1,10 @@
 package com.tamimattafi.asdgroup.Classes
 
-import android.net.ParseException
-import android.net.Uri
 import android.util.Xml
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
-import kotlin.math.min
 
 class NewsFeedParser(PAGE_SIZE : Int,PREVIOUS_SIZE : Int){
 

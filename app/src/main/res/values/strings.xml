@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">ASD Group</string>
+    <string name="russia">Россия</string>
+    <string name="tittle">Россиянин спас соседнюю многоэтажку от взрыва газа</string>
+    <string name="description">Житель Ярославля узнал об утечке газа в соседней многоэтажке и спас спящих жильцов от
+        взрыва. Вместе с другом молодой человек встретил на улице мужчину на костылях, который лежал в снегу и говорил,
+        что открыл дома все конфорки. Окно в квартире оказалось занавешено одеялом, чтобы не выходил газ.
+    </string>
+    <string name="time">Сегодня - 2м назад</string>
+    <string name="asdgroup">ASDGroup</string>
+    <string name="please_wait">Пожалуйста, подождите…</string>
+    <string name="connection_error">Ошибка соединения</string>
+    <string name="error">Error</string>
+    <string name="image">Image</string>
+    <string name="asdgroup_copyright_2019">ASDGroup - Copyright 2019</string>
 </resources>

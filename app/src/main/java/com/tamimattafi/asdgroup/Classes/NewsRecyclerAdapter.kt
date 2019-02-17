@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.LinearLayout
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -86,12 +86,12 @@ import kotlin.collections.ArrayList
     //Initializes news items
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(mNewsItem: NewsObject) {
-            if (mNewsItem.getNewsTittle()== ""){
-                itemView.rootView.visibility = View.GONE
-                itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+            if (mNewsItem.getNewsTittle().length < 3){
+                itemView.visibility = View.GONE
+                itemView.layoutParams = LinearLayout.LayoutParams(0, 0)
             }
             else {
-                itemView.rootView.visibility = View.VISIBLE
+                itemView.visibility = View.VISIBLE
             }
             //Parsing date
             val pubDateString = try {

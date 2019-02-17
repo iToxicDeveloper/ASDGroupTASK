@@ -17,14 +17,14 @@
     </android.support.v7.widget.Toolbar>
     <TextView
             android:textSize="20sp"
-            android:text="ASDGroup"
+            android:text="@string/asdgroup"
             android:fontFamily="@font/lato_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@+id/news_toolbar"
             app:layout_constraintStart_toStartOf="@+id/news_toolbar"
             app:layout_constraintTop_toTopOf="@+id/news_toolbar"
-            app:layout_constraintBottom_toBottomOf="@+id/news_toolbar"/>
+            app:layout_constraintBottom_toBottomOf="@+id/news_toolbar" android:id="@+id/textView"/>
     <android.support.v4.widget.SwipeRefreshLayout
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/news_refresh"
@@ -39,28 +39,19 @@
                 android:scrollbars="vertical"
                 android:id="@+id/news_recycler"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-    <LinearLayout
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
+
+    <TextView
             android:id="@+id/news_error"
+            android:drawableTop="@drawable/ic_error"
+            android:text="@string/connection_error"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view">
-        <ImageView
-                android:src="@drawable/ic_error"
-                android:tint="@color/gray_light"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-        <TextView
-                android:text="Ошибка соединения"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            app:layout_constraintTop_toTopOf="@+id/news_refresh"/>
 
-    </LinearLayout>
     <ProgressBar
             android:id="@+id/news_progressBar"
             android:layout_width="wrap_content"

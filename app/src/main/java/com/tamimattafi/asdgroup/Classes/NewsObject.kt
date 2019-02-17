@@ -1,10 +1,6 @@
 package com.tamimattafi.asdgroup.Classes
 
-import android.accounts.AuthenticatorDescription
-import android.net.Uri
 import java.io.Serializable
-import java.net.URL
-import java.util.*
 
 class NewsObject : Serializable{
 
