@@ -33,13 +33,14 @@ class WebPage : AppCompatActivity() {
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                 super.onReceivedError(view, request, error)
                 web_error.visibility = View.VISIBLE
-                web_webView.visibility = View.GONE
+                view!!.visibility = View.GONE
                 web_refresh.isRefreshing = false
             }
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 web_progressBar.visibility = View.GONE
                 web_refresh.isRefreshing = false
+                view!!.visibility = View.VISIBLE
 
             }
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -53,6 +54,7 @@ class WebPage : AppCompatActivity() {
         //Refresh web view
         web_refresh.setOnRefreshListener {
             web_webView.reload()
+            web_error.visibility = View.GONE
         }
     }
 
